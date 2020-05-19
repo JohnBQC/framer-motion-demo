@@ -1,3 +1,7 @@
+## Framer Motion
+
+`framer-motion` is a React animation library. It is slightly larger than `react-spring`, shipping at 25kb gzipped (there's a PR to reduce bundle size by ~12kb). The tradeoff is that developers are provided a better API with access to more ways to animate components.
+
 ### `motion`
 
 To begin with animation in `framer-motion` you will need to
