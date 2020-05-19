@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.accordion-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20%;
+}
+.accordion-container > article > h2 {
+  cursor: pointer;
+}

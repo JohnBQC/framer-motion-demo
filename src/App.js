@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Accordion, Magnify, Modal } from "./components";
+import "./App.css";
 
 function App() {
+  const [isToggled, setIsToggled] = useState(false);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <div className="accordion-container">
+        <Accordion />
+        <Accordion />
+      </div>
+      <Magnify />
+      <button onClick={() => setIsToggled(!isToggled)}>Toggle Modal</button>
+      <Modal {...{ isToggled, setIsToggled }}>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          I'm baby biodiesel etsy sustainable hexagon occupy. PBR&B literally
+          sriracha, jianbing skateboard you probably haven't heard of them man
+          braid affogato blog actually forage mustache irony typewriter paleo.
+          Dreamcatcher pitchfork gastropub, vaporware four loko pour-over
+          succulents single-origin coffee.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </Modal>
     </div>
   );
 }

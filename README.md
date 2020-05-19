@@ -1,68 +1,102 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `motion`
 
-## Available Scripts
+To begin with animation in `framer-motion` you will need to
 
-In the project directory, you can run:
+```javascript
+import { motion } from 'framer-motion`,
+```
 
-### `yarn start`
+Any element you want to animate needs to be prepended by this import. You can use any element. There are multiple additional props available on these `motion.element`s, the most used are `initial` and `animate`. Other helpful props include `variants` and `custom`. Additionally there are eventHookProps on `motion.elements` that follow the pattern of `whileEvent`, `onEventStart`, `onEventEnd`. Events that you can listen to are `hover`, `tap`, `pan`, and `drag` (drag events require an additional prop called `drag`). I won't write up examples for each eventHook, but they will all work just like the major props `initial`, `animate`, `exit` (can take object or string/variant key).
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `AnimatePresence` and the `exit` prop
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+`AnimatePresence` is another export from `framer-motion`. It is a wrapper component that goes around a condition that will render your `motion.element`. If the condition becomes false the `exit` animation will trigger first before unmounting the component.
 
-### `yarn test`
+```javascript
+/*
+  Animate states can take an object containing the style properties
+  to be animated
+*/
+<motion.element
+  initial={{ scale: 0 }} // Starts with no scale
+  animate={{ scale: 1 }} // On mount animates to scale: 1
+  exit={{ scale: 2 }}    // Doubles in scale on unmount
+>
+  {children}
+</motion.element>
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+// ===============================================================
 
-### `yarn build`
+/**
+ * If a motion.element has a variants prop, the animate states can
+ * also take strings that match the keys of the passed variants
+ */
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+const variants = {
+  open: { scale: 1 },
+  close: { scale: 0 }
+}
+<motion.element
+  initial='close'     // Starts with no scale
+  animate='open'      // On mount animates to scale: 1
+  exit='close'        // Goes back to no scale on unmount
+  variants={variants} // Must have variants prop to use strings/keys
+>
+  {children}
+</motion.element>
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+// ===============================================================
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+/**
+ *Variants can also be dynamic, by making the key a method
+ */
 
-### `yarn eject`
+const variants = {
+  visible: i => ({
+    opacity: 1,
+    transition: {
+      delay: i * 0.2
+    }
+  }),
+  hidden: { opacity: 0 }
+}
+return items.map((item, i) => (
+  <motion.li
+    custom={i}
+    initial="hidden"
+    animate="visible"
+    exit="hidden"
+    variants={variants}
+  />
+))
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+// ===============================================================
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+/**
+ * Configurations can also be passed to the animation objects for further control
+*/
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+const variants = {
+  open: {
+    scale: 1,
+    transition: {
+      when: "beforeChildren",
+      staggerChildren: 0.3,
+    },
+  },
+  close: {
+    scale: 0,
+    transition: {
+      when: "afterChildren",
+    },
+  }
+}
+<motion.element
+  initial='close'     // Starts with no scale
+  animate='open'      // On mount animates to scale: 1
+  exit='close'        // Goes back to no scale on unmount
+  variants={variants} // Must have variants prop to use strings/keys
+>
+  {children}
+</motion.element>
+```
